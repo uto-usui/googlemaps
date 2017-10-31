@@ -1,0 +1,160 @@
+<%
+// path function begin
+// - - - - - - - - - - - - - - - - - - - - - - - -
+var absolutePath = data.domain + filename.split(data.developDir)[filename.split(data.developDir).length - 1].replace('index.ejs', '').replace('.ejs', '.html');
+var relativePath = '../'.repeat([absolutePath.replace(data.domain, '').split('/').length - 1]);
+%> <%- include(relativePath +'common/_path', {absolutePath:absolutePath, relativePath:relativePath})
+%> <%
+//
+var path = pagePath();
+// - - - - - - - - - - - - - - - - - - - - - - - -
+// path function end
+//
+//
+// page info
+// - - - - - - - - - - - - - - - - - - - - - - - -
+var page = {
+    title: 'map geocoder',
+    desc: 'Draw googlemap',
+    ogp: {
+        image: '',
+        type: 'website'
+    },
+    singleCss: [],
+    singleJs: [],
+    modifier: 'basic'
+};
+%> <%
+// = = = = = = = = = = = = = = = = = = = =
+//
+// html begin
+//
+// = = = = = = = = = = = = = = = = = = = =
+%> <%- include(path.re +'common/parts/_head', {page:page, path:path}) %>
+
+<main class="main<% if(page.modifier) { %> main--<%= page.modifier %> <% } %>">
+
+
+        <section class="hero is-bold">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">
+                        Geocoder
+                    </h1>
+                    <h2 class="subtitle">
+                        Get an address with geocoder and pin up at the center of the map.
+                    </h2>
+                </div>
+            </div>
+        </section>
+
+
+        <div class="columns">
+
+<%- include(path.re +'common/parts/_sidebar', {page:page, path:path}) %>
+
+
+            <div class="column is-three-quarters">
+                <div class="field has-addons">
+                    <div class="control">
+                        <input class="input" type="text" placeholder="Find a repository">
+                    </div>
+                    <div class="control">
+                        <a class="button is-info">
+                            Search
+                        </a>
+                    </div>
+                </div>
+                <div class="box">
+                    <div style="height: 100vh;" id="js-map"></div>
+                </div>
+            </div>
+
+        </div>
+
+</main>
+
+<script src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyBKLlm2n4ldGHejEWQY5bFaiogNYSxDoTQ"></script>
+<script src="<%= path.js %>index.js"></script>
+
+<script>
+  const gMap = () => {
+
+    /**
+     * マップ要素を取得する
+     * @type {Element}
+     */
+    let canvas = document.getElementById('js-map');
+
+    /**
+     * ジオロケーションで、場所から緯度経度を取り出す
+     * @type {google.maps.Geocoder}
+     */
+    let geocoder = new google.maps.Geocoder();
+
+    geocoder.geocode({
+      address: '京都駅'
+    }, function(results, status) {
+
+      if (status === google.maps.GeocoderStatus.OK) {
+
+        let center = results[0].geometry.location;
+
+        mapSet(center);
+
+      } else {
+
+        console.group('Error');
+
+      }
+
+    });
+
+    /**
+     * 緯度経度を取得したら実行
+     * @type {Object}
+     */
+    const mapSet = (center) => {
+
+      /**
+       * マップのオプション
+       * @type {{zoom: number, center: *}}
+       */
+      let mapOptions = {
+        zoom: 15,
+        center: center,
+      };
+
+      /**
+       * マップを作成
+       */
+      let map = new google.maps.Map(canvas, mapOptions);
+
+      /**
+       * マーカーのセット
+       */
+      new google.maps.Marker({
+        position: center,
+        map: map,
+        animation: google.maps.Animation.DROP,
+      });
+
+    }
+
+  };
+
+
+  document.addEventListener('DOMContentLoaded', () => {
+
+    gMap();
+
+  });
+</script>
+
+<%
+// = = = = = = = = = = = = = = = = = = = =
+//
+// html end
+//
+// = = = = = = = = = = = = = = = = = = = =
+%>

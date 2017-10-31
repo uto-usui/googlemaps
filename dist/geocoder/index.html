@@ -9,15 +9,15 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="author" content="Okiniirinoao - Yuto Usui">
   <!-- title description -->
-  <title>map basic | site title</title>
+  <title>map geocoder | site title</title>
   <meta name="description" content="Draw googlemap">
   <!-- sp user agent function disable-->
   <meta name="format-detection" content="telephone=no,address=no,email=no"><!-- ogp -->
-  <meta name="twitter:title" content="map basic | site title">
+  <meta name="twitter:title" content="map geocoder | site title">
   <meta name="twitter:image" content="screenshot.png">
-  <meta name="twitter:card" content="summary_large_image"><meta property="og:title" content="map basic | site title">
+  <meta name="twitter:card" content="summary_large_image"><meta property="og:title" content="map geocoder | site title">
   <meta property="og:description" content="Draw googlemap">
-  <meta property="og:url" content="http://my-special-url.com/basic/">
+  <meta property="og:url" content="http://my-special-url.com/geocoder/">
   <meta property="og:image" content="screenshot.png">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="site title">
@@ -38,10 +38,10 @@
             <div class="hero-body">
                 <div class="container">
                     <h1 class="title">
-                        Basic map
+                        Geocoder
                     </h1>
                     <h2 class="subtitle">
-                        Draw maps and markers simply.
+                        Get an address with geocoder and pin up at the center of the map.
                     </h2>
                 </div>
             </div>
@@ -67,6 +67,16 @@
 
 
             <div class="column is-three-quarters">
+                <div class="field has-addons">
+                    <div class="control">
+                        <input class="input" type="text" placeholder="Find a repository">
+                    </div>
+                    <div class="control">
+                        <a class="button is-info">
+                            Search
+                        </a>
+                    </div>
+                </div>
                 <div class="box">
                     <div style="height: 100vh;" id="js-map"></div>
                 </div>
@@ -88,38 +98,60 @@
      */
     let canvas = document.getElementById('js-map');
 
-
     /**
-     * 地図の中心とマーカーのポイント
-     * @type {{lat: number, lng: number}}
+     * ジオロケーションで、場所から緯度経度を取り出す
+     * @type {google.maps.Geocoder}
      */
-    let center = {
-      lat: 34.676894,
-      lng: 135.498998
-    };
+    let geocoder = new google.maps.Geocoder();
 
-    /**
-     * マップのオプション
-     * @type {{zoom: number, center: *}}
-     */
-    let mapOptions = {
-      zoom: 15,
-      center: center,
-    };
+    geocoder.geocode({
+      address: '京都駅'
+    }, function(results, status) {
 
-    /**
-     * マップを作成
-     */
-    let map = new google.maps.Map(canvas, mapOptions);
+      if (status === google.maps.GeocoderStatus.OK) {
 
-    /**
-     * マーカーのセット
-     */
-    new google.maps.Marker({
-      position: center,
-      map: map,
-      animation: google.maps.Animation.DROP,
+        let center = results[0].geometry.location;
+
+        mapSet(center);
+
+      } else {
+
+        console.group('Error');
+
+      }
+
     });
+
+    /**
+     * 緯度経度を取得したら実行
+     * @type {Object}
+     */
+    const mapSet = (center) => {
+
+      /**
+       * マップのオプション
+       * @type {{zoom: number, center: *}}
+       */
+      let mapOptions = {
+        zoom: 15,
+        center: center,
+      };
+
+      /**
+       * マップを作成
+       */
+      let map = new google.maps.Map(canvas, mapOptions);
+
+      /**
+       * マーカーのセット
+       */
+      new google.maps.Marker({
+        position: center,
+        map: map,
+        animation: google.maps.Animation.DROP,
+      });
+
+    }
 
   };
 
