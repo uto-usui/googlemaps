@@ -14,7 +14,7 @@ var path = pagePath();
 // page info
 // - - - - - - - - - - - - - - - - - - - - - - - -
 var page = {
-    title: 'map geocoder',
+    title: 'add marker',
     desc: 'Draw googlemap',
     ogp: {
         image: '',
@@ -39,10 +39,10 @@ var page = {
             <div class="hero-body">
                 <div class="container">
                     <h1 class="title">
-                        Geocoder
+                        Marker
                     </h1>
                     <h2 class="subtitle">
-                        Get an address with geocoder and pin up at the center of the map.
+                        Add markers according to the entered address.
                     </h2>
                 </div>
             </div>
@@ -57,7 +57,12 @@ var page = {
             <div class="column is-three-quarters">
                 <div class="field has-addons">
                     <div class="control">
-                        <input class="input" type="text" placeholder="Find a repository">
+                        <input class="input" type="text" placeholder="Find a repository" id="js-input">
+                    </div>
+                    <div class="control">
+                        <a class="button is-info" id="js-btn">
+                            Search
+                        </a>
                     </div>
                 </div>
                 <div class="box">
@@ -81,29 +86,41 @@ var page = {
      */
     let canvas = document.getElementById('js-map');
 
+    let map = null;
+
+    let markers = [];
+
     /**
      * ジオコーダーで、場所から緯度経度を取り出す
      * @type {google.maps.Geocoder}
      */
     let geocoder = new google.maps.Geocoder();
 
-    geocoder.geocode({
-      address: '京都駅'
-    }, function(results, status) {
+    const getCenter = (place) => {
 
-      if (status === google.maps.GeocoderStatus.OK) {
+      return new Promise((onFullfilled) => {
 
-        let center = results[0].geometry.location;
+        geocoder.geocode({
+          address: place
+        }, function (results, status) {
 
-        mapSet(center);
+          if (status === google.maps.GeocoderStatus.OK) {
 
-      } else {
+            let center = results[0].geometry.location;
 
-        console.group('Error');
+            onFullfilled(center);
 
-      }
+          } else {
 
-    });
+            console.group('Error');
+
+          }
+
+        });
+
+      });
+
+    };
 
     /**
      * 緯度経度を取得したら実行
@@ -112,29 +129,58 @@ var page = {
     const mapSet = (center) => {
 
       /**
-       * マップのオプション
-       * @type {{zoom: number, center: *}}
-       */
-      let mapOptions = {
-        zoom: 15,
-        center: center,
-      };
-
-      /**
        * マップを作成
        */
-      let map = new google.maps.Map(canvas, mapOptions);
+      if (map === null) {
+
+        /**
+         * マップのオプション
+         * @type {{zoom: number, center: *}}
+         */
+        let mapOptions = {
+          zoom: 15,
+          center: center,
+        };
+
+        map = new google.maps.Map(canvas, mapOptions);
+
+      }
 
       /**
        * マーカーのセット
        */
-      new google.maps.Marker({
+      let marker = new google.maps.Marker({
         position: center,
         map: map,
         animation: google.maps.Animation.DROP,
       });
 
+      markers.push(marker);
+
     }
+
+    const init = async () => {
+
+      let center = await getCenter('京都駅');
+
+      mapSet(center);
+
+    };
+    init();
+
+    const add = async (place) => {
+
+      let center = await getCenter(place);
+
+      mapSet(center);
+
+    };
+
+    document.getElementById('js-btn').addEventListener('click', function() {
+
+      add(document.getElementById('js-input').value);
+
+    });
 
   };
 

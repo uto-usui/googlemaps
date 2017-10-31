@@ -59,8 +59,9 @@
                         </p>
                         <ul class="menu-list">
                             <li><a href="../basic/">Basic</a></li>
-                            <li><a href="../Geocoder/">Geocoder</a></li>
-                            <li><a href="../Style/">Style</a></li>
+                            <li><a href="../geocoder/">Geocoder</a></li>
+                            <li><a href="../style/">Style</a></li>
+                            <li><a href="../marker/">marker</a></li>
                         </ul>
                     </aside>
                 </div>
@@ -71,11 +72,6 @@
                 <div class="field has-addons">
                     <div class="control">
                         <input class="input" type="text" placeholder="Find a repository">
-                    </div>
-                    <div class="control">
-                        <a class="button is-info">
-                            Search
-                        </a>
                     </div>
                 </div>
                 <div class="box">
@@ -100,7 +96,7 @@
     let canvas = document.getElementById('js-map');
 
     /**
-     * ジオロケーションで、場所から緯度経度を取り出す
+     * ジオコーダーで、場所から緯度経度を取り出す
      * @type {google.maps.Geocoder}
      */
     let geocoder = new google.maps.Geocoder();
