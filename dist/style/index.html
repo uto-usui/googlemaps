@@ -1,0 +1,344 @@
+ 
+   <!DOCTYPE html>
+<html lang="ja">
+<head>
+  <!-- viewport -->
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <!-- encoding -->
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="author" content="Okiniirinoao - Yuto Usui">
+  <!-- title description -->
+  <title>styled map | site title</title>
+  <meta name="description" content="Draw googlemap">
+  <!-- sp user agent function disable-->
+  <meta name="format-detection" content="telephone=no,address=no,email=no"><!-- ogp -->
+  <meta name="twitter:title" content="styled map | site title">
+  <meta name="twitter:image" content="screenshot.png">
+  <meta name="twitter:card" content="summary_large_image"><meta property="og:title" content="styled map | site title">
+  <meta property="og:description" content="Draw googlemap">
+  <meta property="og:url" content="http://my-special-url.com/style/">
+  <meta property="og:image" content="screenshot.png">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="site title">
+  <!-- favicon -->
+  <link rel="shortcut icon" href="../assets/images/">
+  <link rel="apple-touch-icon-precomposed" href="../assets/images/">
+  <!-- CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.0/css/bulma.min.css">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="../assets/css/main.min.css?var=20161111">
+</head>
+
+
+<main class="main main--styled ">
+
+
+        <section class="hero is-bold">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">
+                        Styled map
+                    </h1>
+                    <h2 class="subtitle">
+                        Give your map its own style and customize it.
+                    </h2>
+                </div>
+            </div>
+        </section>
+
+
+        <div class="columns">
+
+
+            <div class="column">
+                <div class="section">
+                    <aside class="menu">
+                        <p class="menu-label">
+                            Menu
+                        </p>
+                        <ul class="menu-list">
+                            <li><a href="../basic/">Basic</a></li>
+                            <li><a href="../Geocoder/">Geocoder</a></li>
+                            <li><a href="../Style/">Style</a></li>
+                        </ul>
+                    </aside>
+                </div>
+            </div>
+
+
+            <div class="column is-three-quarters">
+                <div class="box">
+                    <div style="height: 100vh;" id="js-map"></div>
+                </div>
+            </div>
+
+        </div>
+
+</main>
+
+<script src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyBKLlm2n4ldGHejEWQY5bFaiogNYSxDoTQ"></script>
+<script src="../assets/js/index.js"></script>
+
+<script>
+  const gMap = () => {
+
+    /**
+     * マップのid
+     * @type {string}
+     */
+    const mapId = 'mymap';
+
+    /**
+     * マップ要素を取得する
+     * @type {Element}
+     */
+    let canvas = document.getElementById('js-map');
+
+
+    /**
+     * 地図の中心とマーカーのポイント
+     * @type {{lat: number, lng: number}}
+     */
+    let center = {
+      lat: 34.676894,
+      lng: 135.498998
+    };
+
+    /**
+     * マップのオプション
+     * @type {{zoom: number, center: *}}
+     */
+    let mapOptions = {
+      zoom: 15,
+      center: center,
+      mapTypeId: mapId,
+    };
+
+    /**
+     * マップを作成
+     */
+    let map = new google.maps.Map(canvas, mapOptions);
+
+    /**
+     * マップのスタイル
+     * @type {array}
+     */
+    let style = [
+      {
+        'featureType': 'road',
+        'elementType': 'geometry',
+        'stylers': [
+          {
+            'visibility': 'off'
+          }
+        ]
+      },
+      {
+        'featureType': 'poi',
+        'elementType': 'geometry',
+        'stylers': [
+          {
+            'visibility': 'off'
+          }
+        ]
+      },
+      {
+        'featureType': 'landscape',
+        'elementType': 'geometry',
+        'stylers': [
+          {
+            'color': '#FFFAF0'
+          }
+        ]
+      },
+      {
+        'featureType': 'water',
+        'stylers': [
+          {
+            'color': '#d9edf7'
+          }
+        ]
+      },
+      {
+        'featureType': 'road',
+        'elementType': 'labels',
+        'stylers': [
+          {
+            'visibility': 'off'
+          }
+        ]
+      },
+      {
+        'featureType': 'transit',
+        'stylers': [
+          {
+            'visibility': 'off'
+          }
+        ]
+      },
+      {
+        'featureType': 'administrative',
+        'elementType': 'geometry',
+        'stylers': [
+          {
+            'lightness': 40
+          }
+        ]
+      },
+      {
+        'featureType': 'poi.park',
+        'elementType': 'geometry',
+        'stylers': [
+          {
+            'visibility': 'on',
+            'color': '#c5dac6'
+          }
+        ]
+      },
+      {
+        'featureType': 'landscape.natural.terrain',
+        'elementType': 'geometry.fill',
+        'stylers': [
+          {
+            'visibility': 'on'
+          },
+          {
+            'color': '#CCAA88'
+          },
+          {
+            'lightness': 40
+          }
+        ]
+      },
+      {
+        'featureType': 'landscape.man_made',
+        'elementType': 'geometry.fill',
+        'stylers': [
+          {
+            'visibility': 'on'
+          },
+          {
+            'color': '#EEEEEE'
+          }
+        ]
+      },
+      {
+        'featureType': 'road',
+        'stylers': [
+          {
+            'visibility': 'simplified'
+          },
+          {
+            'color': '#FF0000'
+          },
+          {
+            'gamma': 9
+          }
+        ]
+      },
+      {
+        'featureType': 'road.highway',
+        'stylers': [
+          {
+            'visibility': 'on'
+          },
+          {
+            'color': '#FF0000'
+          },
+          {
+            'gamma': 8
+          }
+        ]
+      },
+      {
+        'featureType': 'road.highway.controlled_access',
+        'stylers': [
+          {
+            'visibility': 'on'
+          },
+          {
+            'color': '#FF0000'
+          },
+          {
+            'gamma': 4
+          }
+        ]
+      },
+      {
+        'featureType': 'road',
+        'elementType': 'labels',
+        'stylers': [
+          {
+            'visibility': 'off'
+          }
+        ]
+      },
+      {
+        'featureType': 'poi.government',
+        'elementType': 'geometry',
+        'stylers': [
+          {
+            'visibility': 'on'
+          },
+          {
+            'color': '#DDDDDD'
+          }
+        ]
+      },
+      {
+        'featureType': 'transit.station',
+        'elementType': 'geometry',
+        'stylers': [
+          {
+            'visibility': 'on'
+          },
+          {
+            'color': '#CCCCCC'
+          }
+        ]
+      },
+      {
+        'featureType': 'transit.line',
+        'elementType': 'geometry',
+        'stylers': [
+          {
+            'visibility': 'on'
+          },
+          {
+            'color': '#AAAAAA'
+          },
+          {
+            'gamma': 4
+          }
+        ]
+      }
+    ];
+
+     /**
+      * マップスタイルのセット
+      * @type {google.maps.StyledMapType}
+      */
+     let mapStyle = new google.maps.StyledMapType(style);
+     map.mapTypes.set(mapId, mapStyle);
+
+    /**
+     * マーカーのセット
+     */
+    new google.maps.Marker({
+      position: center,
+      map: map,
+      animation: google.maps.Animation.DROP,
+    });
+
+  };
+
+
+  document.addEventListener('DOMContentLoaded', () => {
+
+    gMap();
+
+  });
+</script>
+
+
