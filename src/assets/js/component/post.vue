@@ -30,11 +30,12 @@
         'is-loading': loading,
         'is-desabled': disabled
       }]"
-      :disabled="disabled"
+
       @click="load"
     >load more</button>
   </div>
 </template>
+
 
 <style scoped>
   .fade-enter-active, .fade-leave-active {

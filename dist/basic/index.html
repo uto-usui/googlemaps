@@ -1,0 +1,133 @@
+ 
+   <!DOCTYPE html>
+<html lang="ja">
+<head>
+  <!-- viewport -->
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <!-- encoding -->
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="author" content="Okiniirinoao - Yuto Usui">
+  <!-- title description -->
+  <title>map basic | site title</title>
+  <meta name="description" content="Draw googlemap">
+  <!-- sp user agent function disable-->
+  <meta name="format-detection" content="telephone=no,address=no,email=no"><!-- ogp -->
+  <meta name="twitter:title" content="map basic | site title">
+  <meta name="twitter:image" content="screenshot.png">
+  <meta name="twitter:card" content="summary_large_image"><meta property="og:title" content="map basic | site title">
+  <meta property="og:description" content="Draw googlemap">
+  <meta property="og:url" content="http://my-special-url.com/basic/">
+  <meta property="og:image" content="screenshot.png">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="site title">
+  <!-- favicon -->
+  <link rel="shortcut icon" href="../assets/images/">
+  <link rel="apple-touch-icon-precomposed" href="../assets/images/">
+  <!-- CSS -->
+  <link rel="stylesheet" href="../assets/css/main.min.css?var=20161111">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.0/css/bulma.min.css">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+
+<main class="main main--basic ">
+
+
+        <section class="hero is-bold">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">
+                        Basic map
+                    </h1>
+                    <h2 class="subtitle">
+                        Draw maps and markers simply.
+                    </h2>
+                </div>
+            </div>
+        </section>
+
+
+        <div class="columns">
+
+
+            <div class="column">
+                <div class="section">
+                    <aside class="menu">
+                        <p class="menu-label">
+                            Menu
+                        </p>
+                        <ul class="menu-list">
+                            <li><a href="../basic/">Basic</a></li>
+                        </ul>
+                    </aside>
+                </div>
+            </div>
+
+
+            <div class="column is-three-quarters">
+                <div class="box">
+                    <div style="height: 100vh;" id="js-map"></div>
+                </div>
+            </div>
+
+        </div>
+
+</main>
+
+<script src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyBKLlm2n4ldGHejEWQY5bFaiogNYSxDoTQ"></script>
+<script src="../assets/js/index.js"></script>
+
+<script>
+  const gMap = () => {
+
+    /**
+     * マップ要素を取得する
+     * @type {Element}
+     */
+    let canvas = document.getElementById('js-map');
+
+
+    /**
+     * 地図の中心とマーカーのポイント
+     * @type {{lat: number, lng: number}}
+     */
+    let center = {
+      lat: 34.676894,
+      lng: 135.498998
+    };
+
+    /**
+     * マップのオプション
+     * @type {{zoom: number, center: *}}
+     */
+    let mapOptions = {
+      zoom: 15,
+      center: center,
+    };
+
+    /**
+     * マップを作成
+     */
+    let map = new google.maps.Map(canvas, mapOptions);
+
+    /**
+     * マーカーのセット
+     */
+    new google.maps.Marker({
+      position: center,
+      map: map,
+      animation: google.maps.Animation.DROP,
+    });
+
+  };
+
+
+  document.addEventListener('DOMContentLoaded', () => {
+
+    gMap();
+
+  });
+</script>
+
+

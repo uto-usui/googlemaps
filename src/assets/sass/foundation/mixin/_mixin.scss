@@ -291,7 +291,7 @@
 /// @group no-arguments
 /// @content [Write the style you want to apply to the children, and it will be added within the @content directive]
 @mixin not-unique() {
-  &:not(: only-child) {
+  &:not(:only-child) {
     @content;
   }
 }

@@ -44,13 +44,12 @@ var page = {
 %><%- include(path.re +'common/parts/_head', {page:page, path:path}) %>
 
       <main class="main <% if(page.modifier) { %> main--<%= page.modifier %><% } %>">
-
           <div id="app">{{ message }}
               <my-post></my-post>
-
           </div>
-
       </main>
+
+<script src="<%= path.js %>index.js"></script>
 <%
 
 

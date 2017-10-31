@@ -7,81 +7,82 @@
  */
 const gulp = require('gulp'),
 
-      //
-      // path
-      // - - - - - - - - - -
-      docs = '.',
-      //
-      distDir =  docs + '/dist',
-      srcDir =  docs + '/src',
-      //
-      srcAssetsDir = srcDir + '/assets',
-      distAssetsDir = distDir + '/assets',
-      //
-      srcPath = {
-        'imgPath': srcAssetsDir + '/images',
-        'sassPath': srcAssetsDir + '/sass',
-        'cssPath': srcAssetsDir + '/css',
-        'jsPath': srcAssetsDir + '/js'
-      },
-      distPath = {
-        'imgPath': distAssetsDir + '/images',
-        'sassPath': distAssetsDir + '/sass',
-        'cssPath': distAssetsDir + '/css',
-        'jsPath': distAssetsDir + '/js'
-      },
+  //
+  // path
+  // - - - - - - - - - -
+  docs = '.',
+  //
+  distDir =  docs + '/dist',
+  srcDir =  docs + '/src',
+  //
+  srcAssetsDir = srcDir + '/assets',
+  distAssetsDir = distDir + '/assets',
+  //
+  srcPath = {
+    'imgPath': srcAssetsDir + '/images',
+    'sassPath': srcAssetsDir + '/sass',
+    'cssPath': srcAssetsDir + '/css',
+    'jsPath': srcAssetsDir + '/js'
+  },
+  distPath = {
+    'imgPath': distAssetsDir + '/images',
+    'sassPath': distAssetsDir + '/sass',
+    'cssPath': distAssetsDir + '/css',
+    'jsPath': distAssetsDir + '/js'
+  },
 
-      //
-      // common
-      // - - - - - - - - -
-      plumber = require('gulp-plumber'), // error escape
-      rename = require('gulp-rename'), // rename
-      sourcemaps = require('gulp-sourcemaps'), // sourcemap
-      gulpSequence = require('gulp-sequence'), // sequence
-      notify = require('gulp-notify'), // alert
-      watch = require('gulp-watch'),  // watch
-      del = require('del'), // delete
-      fs = require('graceful-fs'), // JSON load
-      cache = require('gulp-cached'), // cache
+  //
+  // common
+  // - - - - - - - - -
+  plumber = require('gulp-plumber'), // error escape
+  rename = require('gulp-rename'), // rename
+  sourcemaps = require('gulp-sourcemaps'), // sourcemap
+  gulpSequence = require('gulp-sequence'), // sequence
+  notify = require('gulp-notify'), // alert
+  watch = require('gulp-watch'),  // watch
+  del = require('del'), // delete
+  fs = require('graceful-fs'), // JSON load
+  cache = require('gulp-cached'), // cache
 
-      //
-      // CSS
-      // - - - - - - - - -
-      autoprefixer = require('gulp-autoprefixer'), // prefix
-      sass = require('gulp-compass'), // Sass compass
-      csscomb = require('gulp-csscomb'), // css
-      cssmin = require('gulp-cssmin'), // css min
-      frontnote = require('gulp-frontnote'), // style guide
+  //
+  // CSS
+  // - - - - - - - - -
+  autoprefixer = require('gulp-autoprefixer'), // prefix
+  sass = require('gulp-sass'), // Sass compass
+  csscomb = require('gulp-csscomb'), // css
+  cssmin = require('gulp-cssmin'), // css min
+  frontnote = require('gulp-frontnote'), // style guide
 
-      //
-      // JavaScript
-      // - - - - - - - - -
-      uglify = require('gulp-uglify'), // js min
-      babel = require('gulp-babel'), // es6
-      concat = require('gulp-concat'), // concat ... order.JSON
-      eslint = require('gulp-eslint'), // eslint
-      webpackStream = require('webpack-stream'),
-      webpack = require('webpack'),
-      webpackConfig = require('./webpack.config'),
+  //
+  // JavaScript
+  // - - - - - - - - -
+  uglify = require('gulp-uglify'), // js min
+  babel = require('gulp-babel'), // es6
+  concat = require('gulp-concat'), // concat ... order.JSON
+  eslint = require('gulp-eslint'), // eslint
+  webpackStream = require('webpack-stream'),
+  webpack = require('webpack'),
+  webpackConfig = require('./webpack.config'),
 
-      //
-      // HTML
-      // - - - - - - - - -
-      ejs = require('gulp-ejs'), // ejs template
-      minifyHtml = require('gulp-minify-html'), // html min
-      browser = require('browser-sync'), // browser start
+  //
+  // HTML
+  // - - - - - - - - -
+  ejs = require('gulp-ejs'), // ejs template
+  minifyHtml = require('gulp-minify-html'), // html min
+  browser = require('browser-sync'), // browser start
 
-      //
-      // image
-      // - - - - - - - - -
-      imagemin = require('gulp-imagemin'), // image min
-      pngquant = require('imagemin-pngquant');
+  //
+  // image
+  // - - - - - - - - -
+  imagemin = require('gulp-imagemin'), // image min
+  pngquant = require('imagemin-pngquant'),
+  mozjpeg = require('imagemin-mozjpeg');
 
 
 /**
  * Start the server
  *
-*/
+ */
 gulp.task('browser', () => {
   browser({ server: { baseDir: distDir + '/' } });
 });
@@ -104,7 +105,7 @@ gulp.task('browser', () => {
  * 一時保存して、圧縮して名前を変更して、再保存。
  * ブラウザを再起動する。
  *
-*/
+ */
 gulp.task('sass', () => {
   gulp.src(srcPath.sassPath + '/**/*.scss')
     .pipe(plumber({ errorHandler: notify.onError('<%= error.message %>') }))
@@ -142,7 +143,7 @@ gulp.task('sass', () => {
  * webpackに処理を渡す。
  * ブラウザをリロードする。
  *
-*/
+ */
 //
 gulp.task('js.lint', () => {
   return gulp.src([srcPath.jsPath + '/main/**/*.js'])
@@ -161,9 +162,9 @@ gulp.task('js.webpack', () => {
 gulp.task('js.uglify', () => {
   return gulp.src([distPath.jsPath + '/**/*.js', '!' + distPath.jsPath + '/**/*.min*.js'])
     .pipe(plumber({ errorHandler: notify.onError('<%= error.message %>') }))
-    .pipe(sourcemaps.init())
+    //.pipe(sourcemaps.init())
     .pipe(uglify({output:{comments: /^!/}}))
-    .pipe(sourcemaps.write())
+    //.pipe(sourcemaps.write())
     .pipe(rename({ suffix: '.min' }))
     .pipe(gulp.dest(distPath.jsPath + '/'))
     .pipe(browser.reload({ stream: true }))
@@ -187,7 +188,7 @@ gulp.task('js', function(callback) {
  * htmlを圧縮して保存。
  * ブラウザを再起動する。
  *
-*/
+ */
 gulp.task('ejs.init', () => {
   return gulp.src([srcDir + '/**/*.ejs','!' + srcDir + '/**/*_*.ejs'])
     .pipe(plumber({ errorHandler: notify.onError('<%= error.message %>') }))
@@ -213,7 +214,7 @@ gulp.task('ejs', ['ejs.init', 'ejs.reload']);
  * 画像を圧縮して保存。
  * ブラウザを再起動する。
  *
-*/
+ */
 gulp.task('images.min', () => {
   return gulp.src(srcPath.imgPath + '/**/*.{png,jpg,gif,svg}')
     .pipe(plumber({ errorHandler: notify.onError('<%= error.message %>')}))
@@ -231,7 +232,7 @@ gulp.task('images', ['images.min', 'images.reload']);
 /**
  * dafault task
  *
-*/
+ */
 gulp.task('default', ['browser'], () => {
   watch([srcPath.jsPath + '/**/*.{js,vue}', ], () => { gulp.start(['js']) });
   watch([srcPath.sassPath + '/**/*.scss'], () => { gulp.start(['sass']) });
@@ -241,15 +242,15 @@ gulp.task('default', ['browser'], () => {
 
 
 let myDate = new Date(),
-    releaseYear = myDate.getFullYear() + '',
-    releaseMonth = myDate.getMonth() + 1,
-    releaseDay = myDate.getDate() + '',
-    releaseWeek = myDate.getDay(),
-    yobiArray = ['日','月','火','水','木','金','土'],
-    releaseYobi = yobiArray[releaseWeek],
-    releaseHour = myDate.getHours() + '',
-    releaseMinute = myDate.getMinutes() + '',
-    releaseSecond = myDate.getSeconds() + '';
+  releaseYear = myDate.getFullYear() + '',
+  releaseMonth = myDate.getMonth() + 1,
+  releaseDay = myDate.getDate() + '',
+  releaseWeek = myDate.getDay(),
+  yobiArray = ['日','月','火','水','木','金','土'],
+  releaseYobi = yobiArray[releaseWeek],
+  releaseHour = myDate.getHours() + '',
+  releaseMinute = myDate.getMinutes() + '',
+  releaseSecond = myDate.getSeconds() + '';
 
 if (releaseMonth < 10) { releaseMonth = '0' + releaseMonth };
 if (releaseDay < 10) { releaseDay = '0' + releaseDay };
@@ -259,7 +260,7 @@ let releaseDate = releaseYear + releaseMonth + releaseDay;
 /**
  * Clean up the file for release
  *
-*/
+ */
 gulp.task('copy', () => {
   gulp.src(distDir + '/**/*')
     .pipe(gulp.dest('release/' + releaseDate));
@@ -267,5 +268,5 @@ gulp.task('copy', () => {
 
 gulp.task('delete', () => {
   gulp.src('release/')
-    del(['release/**/*.LCK', 'release/**/*_notes', 'release/**/Templates/']);
+  del(['release/**/*.LCK', 'release/**/*_notes', 'release/**/Templates/']);
 });

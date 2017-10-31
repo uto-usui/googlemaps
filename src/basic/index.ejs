@@ -1,0 +1,128 @@
+<%
+// path function begin
+// - - - - - - - - - - - - - - - - - - - - - - - -
+var absolutePath = data.domain + filename.split(data.developDir)[filename.split(data.developDir).length - 1].replace('index.ejs', '').replace('.ejs', '.html');
+var relativePath = '../'.repeat([absolutePath.replace(data.domain, '').split('/').length - 1]);
+%> <%- include(relativePath +'common/_path', {absolutePath:absolutePath, relativePath:relativePath})
+%> <%
+//
+var path = pagePath();
+// - - - - - - - - - - - - - - - - - - - - - - - -
+// path function end
+//
+//
+// page info
+// - - - - - - - - - - - - - - - - - - - - - - - -
+var page = {
+    title: 'map basic',
+    desc: 'Draw googlemap',
+    ogp: {
+        image: '',
+        type: 'website'
+    },
+    singleCss: [],
+    singleJs: [],
+    modifier: 'basic'
+};
+%> <%
+// = = = = = = = = = = = = = = = = = = = =
+//
+// html begin
+//
+// = = = = = = = = = = = = = = = = = = = =
+%> <%- include(path.re +'common/parts/_head', {page:page, path:path}) %>
+
+<main class="main<% if(page.modifier) { %> main--<%= page.modifier %> <% } %>">
+
+
+        <section class="hero is-bold">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">
+                        Basic map
+                    </h1>
+                    <h2 class="subtitle">
+                        Draw maps and markers simply.
+                    </h2>
+                </div>
+            </div>
+        </section>
+
+
+        <div class="columns">
+
+<%- include(path.re +'common/parts/_sidebar', {page:page, path:path}) %>
+
+
+            <div class="column is-three-quarters">
+                <div class="box">
+                    <div style="height: 100vh;" id="js-map"></div>
+                </div>
+            </div>
+
+        </div>
+
+</main>
+
+<script src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyBKLlm2n4ldGHejEWQY5bFaiogNYSxDoTQ"></script>
+<script src="<%= path.js %>index.js"></script>
+
+<script>
+  const gMap = () => {
+
+    /**
+     * マップ要素を取得する
+     * @type {Element}
+     */
+    let canvas = document.getElementById('js-map');
+
+
+    /**
+     * 地図の中心とマーカーのポイント
+     * @type {{lat: number, lng: number}}
+     */
+    let center = {
+      lat: 34.676894,
+      lng: 135.498998
+    };
+
+    /**
+     * マップのオプション
+     * @type {{zoom: number, center: *}}
+     */
+    let mapOptions = {
+      zoom: 15,
+      center: center,
+    };
+
+    /**
+     * マップを作成
+     */
+    let map = new google.maps.Map(canvas, mapOptions);
+
+    /**
+     * マーカーのセット
+     */
+    new google.maps.Marker({
+      position: center,
+      map: map,
+      animation: google.maps.Animation.DROP,
+    });
+
+  };
+
+
+  document.addEventListener('DOMContentLoaded', () => {
+
+    gMap();
+
+  });
+</script>
+
+<%
+// = = = = = = = = = = = = = = = = = = = =
+//
+// html end
+//
+// = = = = = = = = = = = = = = = = = = = =
+%>
