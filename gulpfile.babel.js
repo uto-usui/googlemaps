@@ -263,10 +263,10 @@ let releaseDate = releaseYear + releaseMonth + releaseDay;
  */
 gulp.task('copy', () => {
   gulp.src(distDir + '/**/*')
-    .pipe(gulp.dest('release/' + releaseDate));
+    .pipe(gulp.dest('docs/' + releaseDate));
 });
 
 gulp.task('delete', () => {
-  gulp.src('release/')
+  gulp.src('docs/')
   del(['release/**/*.LCK', 'release/**/*_notes', 'release/**/Templates/']);
 });
