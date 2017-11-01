@@ -2,8 +2,7 @@
   "parser": "babel-eslint",
   "extends": "eslint:recommended",
   "globals": {
-    "paceOptions": true,
-    "Pace": true
+    "google": true
   },
   "env": {
     "browser": true,
