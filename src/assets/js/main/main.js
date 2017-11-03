@@ -1,6 +1,8 @@
 import 'babel-polyfill';
-import Vue from 'Vue';
-import myPost from 'Component/post';
+// import Vue from 'Vue';
+// import myPost from 'Component/post';
+
+// import 'owl.carousel'
 
 
 if (document.getElementById('app')) {
