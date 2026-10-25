@@ -73,7 +73,7 @@
 
       page() {
 
-        const url = `https://webmanab-html.com/wp-json/wp/v2/tip?page=${this.page}&_embed`;
+        const url = `https://webmanab.com/wp-json/wp/v2/tip?page=${this.page}&_embed`;
 
         (async () => {
 
